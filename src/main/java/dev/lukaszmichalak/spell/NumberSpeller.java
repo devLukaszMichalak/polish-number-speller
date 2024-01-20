@@ -2,9 +2,9 @@ package dev.lukaszmichalak.spell;
 
 class NumberSpeller {
     
-    static String spellNumber(int number) {
+    static StringBuilder spellNumber(int number) {
         if (number == 0) {
-            return "zero";
+            return new StringBuilder("zero");
         }
         
         StringBuilder result = new StringBuilder();
@@ -25,14 +25,52 @@ class NumberSpeller {
             int groupType = getGroupType(one, hundred, ten, teen);
             
             if (hundred + ten + teen + one > 0) {
-                result.insert(0, hundreds[hundred] + tens[ten] + teens[teen] + ones[one] + groups[group][groupType]);
+                
+                addGroupIfNeeded(group, groupType, result);
+                
+                if (teen > 0) {
+                    addTeens(result, teen, hundred);
+                } else {
+                    addNormal(result, one, ten, hundred);
+                }
             }
             
             group++;
             number = number / 1000;
         }
         
-        return result.toString();
+        return result;
+    }
+    
+    private static void addNormal(StringBuilder result, int one, int ten, int hundred) {
+        result.insert(0, ones[one]);
+        
+        if (ten > 0 && one > 0) {
+            result.insert(0, " ");
+        }
+        result.insert(0, tens[ten]);
+        
+        if (hundred > 0 && ten > 0 || hundred > 0 && one > 0) {
+            result.insert(0, " ");
+        }
+        result.insert(0, hundreds[hundred]);
+    }
+    
+    private static void addTeens(StringBuilder result, int teen, int hundred) {
+        result.insert(0, teens[teen]);
+        
+        if (hundred > 0) {
+            result.insert(0, " ");
+        }
+        result.insert(0, hundreds[hundred]);
+    }
+    
+    private static void addGroupIfNeeded(int group, int groupType, StringBuilder result) {
+        if (!groups[group][groupType].isBlank()) {
+            result.insert(0, " ");
+            result.insert(0, groups[group][groupType]);
+            result.insert(0, " ");
+        }
     }
     
     private static int getGroupType(int one, int hundred, int ten, int teen) {
@@ -49,65 +87,63 @@ class NumberSpeller {
     
     private static final String[] ones = {
             "",
-            " jeden",
-            " dwa",
-            " trzy",
-            " cztery",
-            " pięć",
-            " sześć",
-            " siedem",
-            " osiem",
-            " dziewięć"
+            "jeden",
+            "dwa",
+            "trzy",
+            "cztery",
+            "pięć",
+            "sześć",
+            "siedem",
+            "osiem",
+            "dziewięć"
     };
     
     private final static String[] teens = {
             "",
-            " jedenaście",
-            " dwanaście",
-            " trzynaście",
-            " czternaście",
-            " piętnaście",
-            " szesnaście",
-            " siedemnaście",
-            " osiemnaście",
-            " dziewiętnaście"
+            "jedenaście",
+            "dwanaście",
+            "trzynaście",
+            "czternaście",
+            "piętnaście",
+            "szesnaście",
+            "siedemnaście",
+            "osiemnaście",
+            "dziewiętnaście"
     };
     
     private final static String[] tens = {
             "",
-            " dziesięć",
-            " dwadzieścia",
-            " trzydzieści",
-            " czterdzieści",
-            " pięćdziesiąt",
-            " sześćdziesiąt",
-            " siedemdziesiąt",
-            " osiemdziesiąt",
-            " dziewięćdziesiąt"
+            "dziesięć",
+            "dwadzieścia",
+            "trzydzieści",
+            "czterdzieści",
+            "pięćdziesiąt",
+            "sześćdziesiąt",
+            "siedemdziesiąt",
+            "osiemdziesiąt",
+            "dziewięćdziesiąt"
     };
     
     private final static String[] hundreds = {
             "",
-            " sto",
-            " dwieście",
-            " trzysta",
-            " czterysta",
-            " pięćset",
-            " sześćset",
-            " siedemset",
-            " osiemset",
-            " dziewięćset"
+            "sto",
+            "dwieście",
+            "trzysta",
+            "czterysta",
+            "pięćset",
+            "sześćset",
+            "siedemset",
+            "osiemset",
+            "dziewięćset"
     };
     
     private final static String[][] groups = {
             {"", "", ""},
-            {" tysiąc", " tysiące", " tysięcy"},
-            {" milion", " miliony", " milionów"},
-            {" miliard", " miliardy", " miliardów"},
-            {" bilion", " biliony", " bilionów"},
-            {" biliard", " biliardy", " biliardów"},
-            {" trylion", " tryliony", " trylionów"}
+            {"tysiąc", "tysiące", "tysięcy"},
+            {"milion", "miliony", "milionów"},
+            {"miliard", "miliardy", "miliardów"},
+            {"bilion", "biliony", "bilionów"},
+            {"biliard", "biliardy", "biliardów"},
+            {"trylion", "tryliony", "trylionów"}
     };
 }
-
-

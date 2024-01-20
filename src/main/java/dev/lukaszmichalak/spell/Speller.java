@@ -23,14 +23,34 @@ public class Speller {
             return "zero złotych";
         }
         
-        String znak = !currency.isPositive() ? "minus" : "";
+        String znak = !currency.isPositive() ? "minus " : "";
         
-        if (currency.zlote() > 0 && currency.grosze() == 0){
-            return znak +  currency.spellZlote() + " " + currency.getZloteWord();
-        } else if(currency.zlote() > 0 && currency.grosze() > 0) {
-            return znak + currency.spellZlote() + currency.getZloteWord() + " i " + currency.spellGrosze() + currency.getGroszeWord();
+        StringBuilder sb = new StringBuilder();
+        sb.append(znak);
+        
+        if (currency.zlote() > 0 && currency.grosze() == 0) {
+            return sb
+                    .append(currency.spellZlote())
+                    .append(" ")
+                    .append(currency.getZloteWord())
+                    .toString();
+            
+        } else if (currency.zlote() > 0 && currency.grosze() > 0) {
+            return sb
+                    .append(currency.spellZlote())
+                    .append(" ")
+                    .append(currency.getZloteWord())
+                    .append(" i ").append(currency.spellGrosze())
+                    .append(" ")
+                    .append(currency.getGroszeWord())
+                    .toString();
+            
         } else if (currency.zlote() == 0 && currency.grosze() > 0) {
-            return znak + currency.spellGrosze() + currency.getGroszeWord();
+            return sb
+                    .append(currency.spellGrosze())
+                    .append(" ")
+                    .append(currency.getGroszeWord())
+                    .toString();
         } else {
             return "";
         }

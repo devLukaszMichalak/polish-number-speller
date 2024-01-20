@@ -2,20 +2,20 @@ package dev.lukaszmichalak.spell;
 
 class CurrencyNumber {
     
-    private boolean isPositive;
-    private NumberPart zlote;
+    private final boolean isPositive;
+    private final NumberPart zlote;
     private final NumberPart grosze;
     
     CurrencyNumber(String number) {
+        
+        if (number.startsWith("-")) {
+            isPositive = false;
+            number = number.replace("-", "");
+        } else {
+            isPositive = true;
+        }
+        
         if (number.contains(".")) {
-            
-            if (number.startsWith("-")) {
-                isPositive = false;
-                number = number.replace("-", "");
-            } else {
-                isPositive = true;
-            }
-            
             number = number + "00";
             String licznik = number.strip().substring(0, number.indexOf(".") + 3);
             String[] zloteGrosze = licznik.split("\\.");
@@ -27,14 +27,13 @@ class CurrencyNumber {
         } else {
             zlote = new NumberPart(number);
             grosze = new NumberPart(0);
-            isPositive = zlote() > 0;
         }
     }
     
     CurrencyNumber(int zlote) {
-        this.zlote = new NumberPart(zlote);
-        this.grosze = new NumberPart(0);
-        this.isPositive = zlote() > 0;
+        isPositive = zlote > 0;
+        this.zlote = isPositive ? new NumberPart(zlote) : new NumberPart(Math.negateExact(zlote));
+        grosze = new NumberPart(0);
     }
     
     int zlote() {
@@ -49,11 +48,11 @@ class CurrencyNumber {
         return zlote.isZero() && grosze.isZero();
     }
     
-    String spellGrosze() {
+    StringBuilder spellGrosze() {
         return NumberSpeller.spellNumber(grosze());
     }
     
-    String spellZlote() {
+    StringBuilder spellZlote() {
         return NumberSpeller.spellNumber(zlote());
     }
     
@@ -77,11 +76,11 @@ class CurrencyNumber {
     
     String getGroszeWord() {
         if (grosze() == 1) {
-            return "jeden grosz";
+            return "grosz";
         } else if (grosze() % 10 >= 2 && grosze() % 10 <= 4 && grosze() / 10 != 1) {
-            return " grosze";
+            return "grosze";
         } else {
-            return " groszy";
+            return "groszy";
         }
     }
     
