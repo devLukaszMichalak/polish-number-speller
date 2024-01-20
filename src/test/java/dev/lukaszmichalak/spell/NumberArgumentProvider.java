@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-public class NumberArgumentProvider implements ArgumentsProvider {
+class NumberArgumentProvider implements ArgumentsProvider {
     
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
