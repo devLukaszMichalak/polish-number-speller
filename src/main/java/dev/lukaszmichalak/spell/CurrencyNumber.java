@@ -44,19 +44,92 @@ class CurrencyNumber {
         return grosze.get();
     }
     
-    boolean isZero() {
+    String spellWithCurrency() {
+        if (isZero()) {
+            return "zero złotych";
+        }
+        
+        String znak = !isPositive() ? "minus " : "";
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(znak);
+        
+        if (zlote() > 0 && grosze() == 0) {
+            return sb
+                    .append(spellZlote())
+                    .append(" ")
+                    .append(getZloteWord())
+                    .toString();
+            
+        } else if (zlote() > 0 && grosze() > 0) {
+            return sb
+                    .append(spellZlote())
+                    .append(" ")
+                    .append(getZloteWord())
+                    .append(" i ").append(spellGrosze())
+                    .append(" ")
+                    .append(getGroszeWord())
+                    .toString();
+            
+        } else if (zlote() == 0 && grosze() > 0) {
+            return sb
+                    .append(spellGrosze())
+                    .append(" ")
+                    .append(getGroszeWord())
+                    .toString();
+        } else {
+            return "";
+        }
+    }
+    
+    String spell() {
+        if (isZero()) {
+            return "zero złotych";
+        }
+        
+        String znak = !isPositive() ? "minus " : "";
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(znak);
+        
+        if (zlote() > 0 && grosze() == 0) {
+            return sb
+                    .append(spellZlote())
+                    .toString();
+            
+        } else if (zlote() > 0 && grosze() > 0) {
+            return sb
+                    .append(spellZlote())
+                    .append(" i ").append(spellGrosze())
+                    .append(" ")
+                    .append(getSetneWord())
+                    .toString();
+            
+        } else if (zlote() == 0 && grosze() > 0) {
+            return sb
+                    .append(spellGrosze())
+                    .append(" ")
+                    .append(getSetneWord())
+                    .toString();
+        } else {
+            return "";
+        }
+    }
+    
+    
+    private boolean isZero() {
         return zlote.isZero() && grosze.isZero();
     }
     
-    StringBuilder spellGrosze() {
+    private StringBuilder spellGrosze() {
         return NumberSpeller.spellNumber(grosze());
     }
     
-    StringBuilder spellZlote() {
+    private StringBuilder spellZlote() {
         return NumberSpeller.spellNumber(zlote());
     }
     
-    String getZloteWord() {
+    private String getZloteWord() {
         String nominal;
         
         if (zlote() % 10 == 1 && zlote() % 100 != 11) {
@@ -74,7 +147,7 @@ class CurrencyNumber {
         return nominal;
     }
     
-    String getGroszeWord() {
+    private String getGroszeWord() {
         if (grosze() == 1) {
             return "grosz";
         } else if (grosze() % 10 >= 2 && grosze() % 10 <= 4 && grosze() / 10 != 1) {
@@ -84,7 +157,17 @@ class CurrencyNumber {
         }
     }
     
-    public boolean isPositive() {
+    private String getSetneWord() {
+        if (grosze() == 1) {
+            return "setna";
+        } else if (grosze() % 10 >= 2 && grosze() % 10 <= 4 && grosze() / 10 != 1) {
+            return "setne";
+        } else {
+            return "setnych";
+        }
+    }
+    
+    private boolean isPositive() {
         return isPositive;
     }
 }

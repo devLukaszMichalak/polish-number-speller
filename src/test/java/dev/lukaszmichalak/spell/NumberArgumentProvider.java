@@ -15,10 +15,13 @@ class NumberArgumentProvider implements ArgumentsProvider {
         return Stream.of(
                 arguments("0.01", "jeden grosz"),
                 arguments("0.11", "jedenaście groszy"),
+                arguments("0.155555", "piętnaście groszy"),
                 arguments("-0.9", "minus dziewięćdziesiąt groszy"),
                 arguments("0.90", "dziewięćdziesiąt groszy"),
                 arguments("0.23", "dwadzieścia trzy grosze"),
+                arguments("0", "zero złotych"),
                 arguments("1", "jeden złoty"),
+                arguments("3.12", "trzy złote i dwanaście groszy"),
                 arguments("13", "trzynaście złotych"),
                 arguments("22", "dwadzieścia dwa złote"),
                 arguments("25", "dwadzieścia pięć złotych"),
